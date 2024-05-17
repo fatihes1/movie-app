@@ -25,9 +25,11 @@ export const SearchDialog:FC = () => {
     const navigate = useNavigate();
 
     const handleDebounceFn = useCallback( (inputValue: string, typeFilter: string) => {
+        // If the input value is empty, set it to 'pokemon'
         if (!inputValue || inputValue === '') {
             inputValue = 'pokemon'
         }
+        // If the input value is less than 2 characters, don't make the request
         if (inputValue.length < 2) return;
         setSearchFilter(inputValue);
         setSearchWord(inputValue);
