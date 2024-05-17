@@ -1,7 +1,7 @@
 import {Movie} from "@/types/response-types.ts";
 import React, {createContext, useEffect, useState} from "react";
 import {getMoviesRequest} from "@/utils/requests/movie-requests.ts";
-import {INITIAL_PER_PAGE} from "@/utils/constant/action-types.ts";
+import {INITIAL_PER_PAGE} from "@/types/define-types.ts";
 
 interface IMovieContext {
     movies: Movie[];
