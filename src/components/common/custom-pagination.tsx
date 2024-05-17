@@ -21,8 +21,8 @@ export const CustomPagination:FC<PaginationProps> = ({ currentPage, pageCount, o
         const totalBlocks = totalNumbers + 1; // Total blocks to show (including ellipses)
 
         if (pageCount > totalBlocks) {
-            const startPage = Math.max(2, currentPage - 2);
-            const endPage = Math.min(pageCount - 1, currentPage + 2);
+            const startPage = Math.max(2, currentPage - 1);
+            const endPage = Math.min(pageCount - 1, currentPage + 1);
 
             const pages = [];
 
@@ -61,13 +61,14 @@ export const CustomPagination:FC<PaginationProps> = ({ currentPage, pageCount, o
     const pageNumbers = getPageNumbers();
 
     return (
-        <Pagination className={'mt-3'}>
+        <Pagination className={'pt-3 pb-3 bg-east-bay-900'}>
             <PaginationContent>
                 {
                     currentPage !== 1 && (
                         <PaginationItem>
                             <PaginationPrevious
                                 href="#"
+                                className={'text-kimberly-400 hover:text-tacao-400 hover:bg-kimberly-700'}
                                 onClick={(e) => {
                                     e.preventDefault();
                                     if (currentPage > 1) onPageChange(currentPage - 1);
@@ -80,7 +81,7 @@ export const CustomPagination:FC<PaginationProps> = ({ currentPage, pageCount, o
                 {pageNumbers.map((number, index) =>
                     number === 'ellipsis1' || number === 'ellipsis2' ? (
                         <PaginationItem key={index}>
-                            <PaginationEllipsis />
+                            <PaginationEllipsis className={'text-kimberly-400'} />
                         </PaginationItem>
                     ) : (
                         <PaginationItem key={index}>
@@ -91,6 +92,7 @@ export const CustomPagination:FC<PaginationProps> = ({ currentPage, pageCount, o
                                     onPageChange(number as number);
                                 }}
                                 isActive={number === currentPage}
+                                className={number === currentPage ? 'bg-kimberly-600 text-tacao-300 border-tacao-300 hover:text-tacao-400 hover:bg-kimberly-700' : 'hover:text-tacao-400 hover:bg-kimberly-700 text-kimberly-400'}
                             >
                                 {number}
                             </PaginationLink>
@@ -102,6 +104,7 @@ export const CustomPagination:FC<PaginationProps> = ({ currentPage, pageCount, o
                         <PaginationItem>
                             <PaginationNext
                                 href="#"
+                                className={'text-kimberly-400 hover:text-tacao-400 hover:bg-kimberly-700'}
                                 onClick={(e) => {
                                     e.preventDefault();
                                     if (currentPage < pageCount) onPageChange(currentPage + 1);
