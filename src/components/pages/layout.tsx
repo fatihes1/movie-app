@@ -1,13 +1,12 @@
 import {Navbar} from "@/components/common/navbar.tsx";
-import {FC, useState} from "react";
+import {FC} from "react";
 import {Home} from "@/components/pages/home.tsx";
 
 export const Layout:FC = () => {
-    const [search, setSearch] = useState<string>('pokemon')
     return (
-        <div className={'h-dvh'}>
-            <Navbar handleOnChangeSearch={setSearch}/>
-            <Home search={search} />
+        <div className={'h-dvh bg-east-bay-900'}>
+            <Navbar/>
+            <Home />
         </div>
     )
 }

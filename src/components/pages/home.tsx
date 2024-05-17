@@ -1,71 +1,38 @@
-import {FC, useEffect, useRef, useState} from "react";
-import {getMoviesRequest} from "@/utils/requests/movie-requests.ts";
-import {Movie} from "@/types/response-types.ts";
+import {FC, useContext, } from "react";
 import {MovieCard} from "@/components/common/movie-card.tsx";
-import {Skeleton} from "@/components/ui/skeleton.tsx";
 import {CustomPagination} from "@/components/common/custom-pagination.tsx";
+import {MovieContext} from "@/providers/movie-provider.tsx";
+import {Loader} from "@/components/common/loader.tsx";
+import {EmptyResult} from "@/components/common/empty-result.tsx";
 
-interface HomeProps {
-    search: string;
-}
 
-export const Home:FC<HomeProps> = ({ search }) => {
-    const INITIAL_PER_PAGE = 10
-    const [page, setPage] = useState(1)
-    const [pageCount, setPageCount] = useState(0)
-    const [isLoading, setIsLoading] = useState(false)
-    const fetchRef = useRef(0)
-    const [movies, setMovies] = useState<Movie[]>([])
-
-    useEffect(() => {
-            setIsLoading(true)
-            void getMoviesRequest(search, page).then((response) => {
-                setMovies(response.data.Search)
-                setPageCount(Math.ceil(Number(response.data.totalResults) / INITIAL_PER_PAGE))
-            }).catch((error) => {
-                console.log(error)
-            }).finally(() => {
-                setIsLoading(false)
-                fetchRef.current = 1
-            })
-    }, [page, search]);
-
-    const onPageChange = (page: number) => {
-        setPage(page);
-    };
+export const Home:FC = () => {
+    const { searchFilter, page, onPageChange, pageCount, isLoading, movies } = useContext(MovieContext)
 
     return (
-        <>
+        <div >
             <div className={'container'}>
-                <h1 className={'text-3xl text-start mt-5'}>The result listing for : "{search}"</h1>
+                <h1 className={'text-3xl text-start mt-3 mb-2 font-medium text-tacao-300'}>The result listing for : "{searchFilter}"</h1>
             </div>
             {
-                isLoading ? (
-                    <div className={'flex mt-4 flex-wrap flex-row justify-center gap-x-5 gap-y-5 mt-4'}>
-                        {
-                            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                            [...Array(10)].map((_, index) => (
-                                <div key={index} className={'w-1/6 h-72'}>
-                                    <Skeleton className="h-72"/>
-                                </div>
-                            ))
-                        }
-                    </div>
-                ) : (
-                    <div>
-                        <div className={'flex flex-row gap-x-5 flex-wrap justify-center gap-y-5 mt-4'}>
-                            {
-                                movies.map((movie, index) => (
-                                    <MovieCard key={index} movie={movie}/>
-                                ))
-                            }
-                        </div>
+                isLoading ? ( <Loader />
+                ) : movies.length > 0 ?
+                    (
                         <div>
-                            <CustomPagination pageCount={pageCount} currentPage={page} onPageChange={onPageChange}/>
+                            <div className={'flex flex-row gap-x-5 pb-1 flex-wrap justify-center border-none gap-y-5 mt-2'}>
+                                {
+                                    movies.map((movie, index) => (
+                                        <MovieCard key={index} movie={movie}/>
+                                    ))
+                                }
+                            </div>
+                            <div>
+                                <CustomPagination pageCount={pageCount} currentPage={page} onPageChange={onPageChange}/>
+                            </div>
                         </div>
-                    </div>
-                )
+                    )
+                 : (<EmptyResult />)
             }
-        </>
+        </div>
     )
 };
